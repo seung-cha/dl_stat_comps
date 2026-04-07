@@ -135,6 +135,7 @@ ax.plot(resistance * 100, shredded_dmg)
 ax.set_xlabel("Target Bullet Resistance (%)")
 ax.set_ylabel("Outgoing bullet damage")
 ax.legend(["Without shred", "With shred"])
+ax.title("Bullet Damage Comparison")
 
 st.pyplot(fig)
 
@@ -168,6 +169,8 @@ ax.plot(fire_rate * 100, shred_dps)
 ax.set_xlabel("Fire rate (%)")
 ax.set_ylabel("Hypothetical DPS")
 ax.legend(['Unshredded', 'Shredded'])
+ax.title("DPS Comparison")
+
 
 st.pyplot(fig)
 
