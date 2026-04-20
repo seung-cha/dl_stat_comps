@@ -63,6 +63,10 @@ class HighVelocityRounds(Item):
             return
         super().register(inventory)
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_speed += 0.6
+        character.weapon.bonus_bullet_damage += 0.08
+
 
 class MonsterRounds(Item):
     def __init__(self):
@@ -76,6 +80,8 @@ class MonsterRounds(Item):
             return
         super().register(inventory)
 
+    def apply_stats(self, character: stats.Character):
+        character.vitality.out_of_combat_regen += 1
 
 class RapidRounds(Item):
     def __init__(self):
@@ -90,6 +96,9 @@ class RapidRounds(Item):
            return
         super().register(inventory)
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_fire_rate += 0.09
+
 
 class RestorativeShot(Item):
     def __init__(self):
@@ -97,6 +106,8 @@ class RestorativeShot(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/restorative_shot.webp"
         self.price = 800
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.06
 
 # ===== 1600 =====
 
@@ -106,12 +117,18 @@ class ActiveReload(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/active_reload.webp"
         self.price = 1600
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_ammo_perc += 0.2
+
 
 class Fleetfoot(Item):
     def __init__(self):
         self.name = "Fleetfoot"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/fleetfoot.webp"
         self.price = 1600
+
+    def apply_stats(self, character: stats.Character):
+        character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.06)
 
 
 class IntensifyingMagazine(Item):
@@ -120,12 +137,18 @@ class IntensifyingMagazine(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/intensifying_magazine.webp"
         self.price = 1600
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_ammo_perc += 0.2
+
 
 class KineticDash(Item):
     def __init__(self):
         self.name = "Kinetic Dash"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/kinetic_dash.webp"
         self.price = 1600
+
+    def apply_stats(self, character: stats.Character):
+        st.warning("TODO: Kinetic Dash stats")
 
 
 class LongRange(Item):
@@ -139,6 +162,9 @@ class LongRange(Item):
         if Sharpshooter.exists(inventory):
             return
         super().register(inventory)
+    
+    def apply_stats(self, character: stats.Character):
+        st.warning("TODO: Sprint Speed Calculation")
 
 class MeleeCharge(Item):
     def __init__(self):
@@ -152,17 +178,27 @@ class MeleeCharge(Item):
             return
         super().register(inventory)
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_melee_damage += 0.1
+        character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.06)
+
 class MysticShot(Item):
     def __init__(self):
         self.name = "Mystic Shot"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/mystic_shot.webp"
         self.price = 1600
 
+    def apply_stats(self, character: stats.Character):
+        character.spirit.spirit_power += 7
+
 class OpeningRounds(Item):
     def __init__(self):
         self.name = "Opening Rounds"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/opening_rounds.webp"
         self.price = 1600
+
+    def apply_stats(self, character: stats.Character):
+        character.spirit.spirit_power += 10
     
 class RechargingRush(Item):
     def __init__(self):
@@ -170,11 +206,18 @@ class RechargingRush(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/recharging_rounds.webp"
         self.price = 1600
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_ammo_perc += 0.2
+        character.weapon.bonus_bullet_damage += 0.1
+
 class SlowingBullets(Item):
     def __init__(self):
         self.name = "Slowing Bullets"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/slowing_bullets.webp"
         self.price = 1600
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.15
     
     @classmethod
     def register(cls, inventory):
@@ -206,12 +249,18 @@ class Stalker(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/backstabber.webp"
         self.price = 1600
 
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 50
+
 class SwiftStriker(Item):
     def __init__(self):
         self.name = "Swift Striker"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/swift_striker.webp"
         self.price = 1600
     
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_fire_rate += 0.2
+
     @classmethod
     def register(cls, inventory):
         RapidRounds.remove(inventory)
@@ -223,6 +272,10 @@ class TitanicMagazine(Item):
         self.name = "Titanic Magazine"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/titanic_magazine.webp"
         self.price = 1600
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_ammo_perc += 1
+        character.weapon.bonus_bullet_damage += 0.14
 
     @classmethod
     def register(cls, inventory):
@@ -242,6 +295,9 @@ class WeakeningHeadshot(Item):
             return
         super().register(inventory)
 
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 60
+
 
 # ===== 3200 =====
 
@@ -250,6 +306,9 @@ class AlchemicalFire(Item):
         self.name = "Alchemical Fire"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/alchemical_fire.webp"
         self.price = 3200
+
+    def apply_stats(self, character: stats.Character):
+        character.spirit.spirit_power += 8
 
 class BallisticEnchantment(Item):
     def __init__(self):
@@ -268,17 +327,26 @@ class Berserker(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/berserker.webp"
         self.price = 3200
 
+    def apply_stats(self, character: stats.Character):
+        character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.08)
+
 class BloodTribute(Item):
     def __init__(self):
         self.name = "Blood Tribute"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/blood_tribute.webp"
         self.price = 3200
 
+    def apply_stats(self, character: stats.Character):
+        character.vitality.spirit_resist = stats.add_multiplicative(character.vitality.spirit_resist, 0.08)
+
 class BurstFire(Item):
     def __init__(self):
         self.name = "Burst Fire"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/burst_fire.webp"
         self.price = 3200
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_fire_rate += 0.1
 
     @classmethod
     def register(cls, inventory):
@@ -302,6 +370,11 @@ class EscalatingResilience(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/escalating_resilience.webp"
         self.price = 3200
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_ammo_perc += 0.3
+        character.vitality.max_health += 75
+        character.weapon.bonus_bullet_damage += 0.15
+
     @classmethod
     def register(cls, inventory):
         ExtendedMagazine.remove(inventory)
@@ -318,6 +391,10 @@ class ExpressShot(Item):
         HighVelocityRounds.remove(inventory)
         super().register(inventory)
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.08
+        character.weapon.bonus_bullet_speed += 0.6
+
 class Headhunter(Item):
     def __init__(self):
         self.name = "Headhunter"
@@ -328,6 +405,10 @@ class Headhunter(Item):
     def register(cls, inventory):
         HeadshotBooster.remove(inventory)
         super().register(inventory)
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.05
+        character.vitality.max_health += 50
 
 class HeroicAura(Item):
     def __init__(self):
@@ -340,12 +421,18 @@ class HollowPoint(Item):
         self.name = "Hollow Point"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/hollow_point.webp"
         self.price = 3200
+    
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 125
 
 class HuntersAura(Item):
     def __init__(self):
         self.name = "Hunter's Aura"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/hunters_aura.webp"
         self.price = 3200
+
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 100
 
 
 class PointBlank(Item):
@@ -358,6 +445,10 @@ class PointBlank(Item):
     def register(cls, inventory):
         CloseQuarter.remove(inventory)
         super().register(inventory)
+
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 75
+        character.vitality.melee_resist = stats.add_multiplicative(character.vitality.melee_resist, 0.3)
 
 
 class Sharpshooter(Item):
@@ -381,6 +472,9 @@ class SpiritRend(Item):
     def register(cls, inventory):
         SpiritShredderBullets.remove(inventory)
         super().register(inventory)
+
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 75
 
 class TeslaBullets(Item):
     def __init__(self):
@@ -407,6 +501,9 @@ class WeightedShots(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/weighted_shots.webp"
         self.price = 3200
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.4
+
     @classmethod
     def register(cls, inventory):
         SlowingBullets.remove(inventory)
@@ -418,6 +515,10 @@ class ArmorPiercingRounds(Item):
         self.name = "Armor Piercing Rounds"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/armor_piercing_rounds.webp"
         self.price = 6400
+    
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_speed += 0.6
+        character.weapon.bonus_bullet_damage = 0.08
 
     @classmethod
     def register(cls, inventory):
@@ -430,6 +531,9 @@ class Capacitor(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/capacitor.webp"
         self.price = 6400
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_fire_Rate += 0.05
+
     @classmethod
     def register(cls, inventory):
         TeslaBullets.remove(inventory)
@@ -440,6 +544,9 @@ class CripplingHeadshot(Item):
         self.name = "Crippling Headshot"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/crippling_headshot.webp"
         self.price = 6400
+
+    def apply_stats(self, character: stats.Character):
+        character.vitality.max_health += 125
 
     @classmethod
     def register(cls, inventory):
@@ -452,6 +559,10 @@ class CrushingFists(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/crushing_fists.webp"
         self.price = 6400
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_melee_damage += 0.2
+        character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.16)
+
     @classmethod
     def register(cls, inventory):
         MeleeCharge.remove(inventory)
@@ -463,12 +574,19 @@ class Frenzy(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/frenzy.webp"
         self.price = 6400
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_fire_rate += 0.1
+        character.vitality.spirit_resist = stats.add_multiplicative(character.vitality.spirit_resist, 0.15)
+
 
 class GlassCannon(Item):
     def __init__(self):
         self.name = "Glass Cannon"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/glass_cannon.webp"
         self.price = 6400
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.8
 
 
 class LuckyShot(Item):
@@ -477,12 +595,18 @@ class LuckyShot(Item):
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/lucky_shot.webp"
         self.price = 6400
 
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_ammo_perc += 0.3
+
 
 class Ricochet(Item):
     def __init__(self):
         self.name = "Ricochet"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/ricochet.webp"
         self.price = 6400
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_fire_rate += 0.18
 
 class ShadowWeave(Item):
     def __init__(self):
@@ -495,6 +619,9 @@ class Silencer(Item):
         self.name = "Silencer"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/silencer.webp"
         self.price = 6400
+
+    def apply_stats(self, character: stats.Character):
+        character.weapon.bonus_bullet_damage += 0.2
 
 class Spellslinger(Item):
     def __init__(self):

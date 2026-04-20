@@ -2,20 +2,24 @@ from abc import ABC, abstractmethod
 
 class Weapon:
     def __init__(   self,\
-                    base_bullet_damage:     float   = .0,\
-                    bonus_bullet_damage:    float   = .0,\
-                    shots_per_second:       float   = .0,\
-                    bullet_speed:           float   = .0,\
-                    bonus_bullet_speed:     float   = .0,\
-                    ammo:                   int     =  0,\
-                    bonus_ammo_perc:        float   = .0,\
-                    bonus_ammo:             int     =  0,\
-                    reload_time:            float   = .0,\
-                    light_melee_damage:     float   = .0,\
-                    heavy_melee_damage:     float   = .0,):
+                    base_bullet_damage:         float   = .0,\
+                    bonus_bullet_damage:        float   = .0,\
+                    shots_per_second:           float   = .0,\
+                    bonus_fire_rate:            float   = .0,\
+                    bullet_speed:               float   = .0,\
+                    bonus_bullet_speed:         float   = .0,\
+                    ammo:                       int     =  0,\
+                    bonus_ammo_perc:            float   = .0,\
+                    bonus_ammo:                 int     =  0,\
+                    reload_time:                float   = .0,\
+                    light_melee_damage:         float   = .0,\
+                    heavy_melee_damage:         float   = .0,\
+                    bonus_melee_damage:         float   = .0,\
+                    bonus_heavy_melee_damage:   float = .0,):
         self.base_bullet_damage             = base_bullet_damage
         self.bonus_bullet_damage            = bonus_bullet_damage
         self.shots_per_second               = shots_per_second
+        self.bonus_fire_rate                = bonus_fire_rate
         self.bullet_speed                   = bullet_speed
         self.bonus_bullet_speed             = bonus_bullet_speed
         self.ammo                           = ammo
@@ -24,12 +28,15 @@ class Weapon:
         self.reload_time                    = reload_time
         self.light_melee_damage             = light_melee_damage
         self.heavy_melee_damage             = heavy_melee_damage
+        self.bonus_melee_damage             = bonus_melee_damage
+        self.bonus_heavy_melee_damage       = bonus_heavy_melee_damage
 
 
 class Vitality:
     def __init__(   self,\
                     max_health:             float   = .0,\
                     health_regen:           float   = .0,\
+                    out_of_combat_regen:    float   = .0,\
                     bullet_resist:          float   = .0,\
                     spirit_resist:          float   = .0,\
                     melee_resist:           float   = .0,\
@@ -40,6 +47,7 @@ class Vitality:
                     stamina_count:          int     =  0,):
         self.max_health                     = max_health
         self.health_regen                   = health_regen
+        self.out_of_combat_regen            = out_of_combat_regen
         self.bullet_resist                  = bullet_resist
         self.spirit_resist                  = spirit_resist
         self.melee_resist                   = melee_resist
