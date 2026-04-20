@@ -4,7 +4,7 @@ class Weapon:
     def __init__(   self,\
                     base_bullet_damage:     float   = .0,\
                     shots_per_second:       float   = .0,\
-                    ammo:                   int     = 0,\
+                    ammo:                   int     =  0,\
                     reload_time:            float   = .0,\
                     light_melee_damage:     float   = .0,\
                     heavy_melee_damage:     float   = .0,):
@@ -20,6 +20,9 @@ class Vitality:
     def __init__(   self,\
                     max_health:             float   = .0,\
                     health_regen:           float   = .0,\
+                    bullet_resist:          float   = .0,\
+                    spirit_resist:          float   = .0,\
+                    melee_resist:           float   = .0,\
                     crit_reduction:         float   = .0,\
                     move_speed:             float   = .0,\
                     sprint_speed:           float   = .0,\
@@ -27,6 +30,9 @@ class Vitality:
                     stamina_count:          int     =  0,):
         self.max_health                     = max_health
         self.health_regen                   = health_regen
+        self.bullet_resist                  = bullet_resist
+        self.spirit_resist                  = spirit_resist
+        self.melee_resist                   = melee_resist
         self.crit_reduction                 = crit_reduction
         self.move_speed                     = move_speed
         self.sprint_speed                   = sprint_speed
