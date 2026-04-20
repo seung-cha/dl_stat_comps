@@ -3,14 +3,24 @@ from abc import ABC, abstractmethod
 class Weapon:
     def __init__(   self,\
                     base_bullet_damage:     float   = .0,\
+                    bonus_bullet_damage:    float   = .0,\
                     shots_per_second:       float   = .0,\
+                    bullet_speed:           float   = .0,\
+                    bonus_bullet_speed:     float   = .0,\
                     ammo:                   int     =  0,\
+                    bonus_ammo_perc:        float   = .0,\
+                    bonus_ammo:             int     =  0,\
                     reload_time:            float   = .0,\
                     light_melee_damage:     float   = .0,\
                     heavy_melee_damage:     float   = .0,):
         self.base_bullet_damage             = base_bullet_damage
+        self.bonus_bullet_damage            = bonus_bullet_damage
         self.shots_per_second               = shots_per_second
+        self.bullet_speed                   = bullet_speed
+        self.bonus_bullet_speed             = bonus_bullet_speed
         self.ammo                           = ammo
+        self.bonus_ammo_perc                = bonus_ammo_perc
+        self.bonus_ammo                     = bonus_ammo
         self.reload_time                    = reload_time
         self.light_melee_damage             = light_melee_damage
         self.heavy_melee_damage             = heavy_melee_damage

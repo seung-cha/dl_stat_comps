@@ -2,6 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 import items
+import stats
 from shop import Shop
 #from session_context import SessionContext
 
@@ -29,6 +30,21 @@ if 'inventory' not in st.session_state:
 
 
 s = Shop()
+char = stats.Character()
 s.draw()
+
+
+# Draw item cond windows
+for item in st.session_state.inventory:
+    item: items.ConditionalProc
+    if isinstance(item, items.ConditionalProc):
+        item.show_cond_window()
+
+
+for item in st.session_state.inventory:
+    item: items.Item
+    item.apply_stats(char)
+
+st.write(f"Bullet Damage: {char.weapon.base_bullet_damage}")
 
 
