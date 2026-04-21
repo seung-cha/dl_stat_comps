@@ -4,9 +4,11 @@ import numpy as np
 import items
 import stats
 from shop import Shop
+from char_select import CharacterSelection
+from copy import deepcopy
 #from session_context import SessionContext
 
-st.title("WIP. Temporary using Billy's data")
+st.title("WIP")
 
 boon_souls_req = [
     600, 900, 1200, 1500, 2100, 2800,\
@@ -25,14 +27,26 @@ weapon_souls_req = [0, 800, 1600, 2400, 3200, 4800, 7200, 9600, 1600, 22400, 288
 
 
 # Init session context
+# session keys:
+#   * inventory: list[items.Item]
+#   * hero: stats.HeroUnit 
+#   * selected_hero: stats.HeroUnit (st.menu_button returns None every time render updates.
+
 if 'inventory' not in st.session_state:
     st.session_state.inventory = list()
 
+if 'hero' not in st.session_state: # Default character to start the session with
+    st.session_state.hero = stats.get_abrams()
+
+char_select = CharacterSelection()
+char_select.draw()
+
+# deepcopy to keep the selected hero readonly
+hero = deepcopy(st.session_state.hero)
+st.write(f"selected: {hero}")
 
 s = Shop()
-char = stats.Character()
 s.draw()
-
 
 # Draw item cond windows
 for item in st.session_state.inventory:
@@ -43,8 +57,12 @@ for item in st.session_state.inventory:
 
 for item in st.session_state.inventory:
     item: items.Item
-    item.apply_stats(char)
+    item.apply_stats(hero.stats)
 
-st.write(f"Bullet Damage: {char.weapon.base_bullet_damage}")
+hero.stats.draw()
+
+
+
+#st.write(f"Bullet Damage: {char.weapon.base_bullet_damage}")
 
 
