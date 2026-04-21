@@ -77,25 +77,6 @@ class Shop:
         st.write(st.session_state.inventory)
     
 
-    def exists(self, item_class) -> bool:
-        return any(isinstance(x, item_class) for x in st.session_state.inventory)
-
-    def register(self, item_class):
-        if not self.exists(item_class):
-            self.insert(item_class)
-        else:
-            self.remove(item_class)
-
-    def insert(self, item_class):
-        st.session_state.inventory.append(item_class())
-
-    def remove(self, item_class):
-        try:
-            ind = [isinstance(item, item_class) for item in st.session_state.inventory].index(True)
-            st.session_state.inventory.pop(ind)
-        except:
-            return
-
     
 
 
