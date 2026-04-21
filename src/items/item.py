@@ -50,7 +50,5 @@ class ConditionalProc(ABC):
         super().__init__()
         self.enable = True
 
-    @classmethod
-    @abstractmethod
     def show_cond_window(self):
-        pass
+        self.enable = st.toggle("Enable Effect", True, key= type(self))

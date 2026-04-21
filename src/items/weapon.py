@@ -2,6 +2,8 @@ import streamlit as st
 from .item import Item, ConditionalProc
 import stats
 
+# TODO: Formula for movespeed stack
+
 # 800
 class CloseQuarter(Item, ConditionalProc):
     def __init__(self):
@@ -21,8 +23,6 @@ class CloseQuarter(Item, ConditionalProc):
         if self.enable:
             character.weapon.bonus_bullet_damage += 0.2
 
-    def show_cond_window(self):
-        self.enable = st.toggle("Enable Passive", True)
         
 class ExtendedMagazine(Item):
     def __init__(self):
@@ -111,8 +111,9 @@ class RestorativeShot(Item):
 
 # ===== 1600 =====
 
-class ActiveReload(Item):
+class ActiveReload(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Active Reload"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/active_reload.webp"
         self.price = 1600
@@ -120,9 +121,14 @@ class ActiveReload(Item):
     def apply_stats(self, character: stats.Character):
         character.weapon.bonus_ammo_perc += 0.2
 
+        if self.enable:
+            character.weapon.bonus_fire_rate += 0.22
+            st.write("TODO: Add bullet lifesteal")
+            character.vitality.move_speed += 0.75
 
-class Fleetfoot(Item):
+class Fleetfoot(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Fleetfoot"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/fleetfoot.webp"
         self.price = 1600
@@ -130,29 +136,46 @@ class Fleetfoot(Item):
     def apply_stats(self, character: stats.Character):
         character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.06)
 
+        if self.enable:
+            character.vitality.move_speed += 3.0
 
-class IntensifyingMagazine(Item):
+
+class IntensifyingMagazine(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Intensifying Magazine"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/intensifying_magazine.webp"
         self.price = 1600
+        self.additional_weapon_dmg = 0.0
 
     def apply_stats(self, character: stats.Character):
         character.weapon.bonus_ammo_perc += 0.2
 
+        if self.enable:
+            character.weapon.bonus_bullet_damage += self.additional_weapon_dmg
+    
+    def show_cond_window(self):
+        self.additional_weapon_dmg = st.slider("Bonus Weapon Damage", 0.0, 0.45, 0.45)
 
-class KineticDash(Item):
+
+class KineticDash(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Kinetic Dash"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/kinetic_dash.webp"
         self.price = 1600
 
     def apply_stats(self, character: stats.Character):
-        st.warning("TODO: Kinetic Dash stats")
+        st.warning("TODO: Kinetic Dash Passive Stats")
+
+        if self.enable:
+            character.weapon.bonus_fire_rate += 0.25
+            character.weapon.bonus_ammo += 6
 
 
-class LongRange(Item):
+class LongRange(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Long Range"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/long_range.webp"
         self.price = 1600
@@ -166,8 +189,14 @@ class LongRange(Item):
     def apply_stats(self, character: stats.Character):
         st.warning("TODO: Sprint Speed Calculation")
 
-class MeleeCharge(Item):
+        if self.enable:
+            character.weapon.bonus_bullet_damage += 0.4
+
+    
+
+class MeleeCharge(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Melee Charge"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/melee_charge.webp"
         self.price = 1600
@@ -182,8 +211,12 @@ class MeleeCharge(Item):
         character.weapon.bonus_melee_damage += 0.1
         character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.06)
 
+        if self.enable:
+            character.weapon.bonus_heavy_melee_damage += 0.25
+
 class MysticShot(Item):
     def __init__(self):
+        super().__init__()
         self.name = "Mystic Shot"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/mystic_shot.webp"
         self.price = 1600
@@ -191,14 +224,18 @@ class MysticShot(Item):
     def apply_stats(self, character: stats.Character):
         character.spirit.spirit_power += 7
 
-class OpeningRounds(Item):
+class OpeningRounds(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Opening Rounds"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/opening_rounds.webp"
         self.price = 1600
 
     def apply_stats(self, character: stats.Character):
         character.spirit.spirit_power += 10
+
+        if self.enable:
+            character.weapon.bonus_bullet_damage += 0.45
     
 class RechargingRush(Item):
     def __init__(self):
@@ -237,11 +274,20 @@ class SpiritShredderBullets(Item):
             return
         super().register(inventory)
 
-class SplitShot(Item):
+class SplitShot(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Split Shot"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/split_shot.webp"
         self.price = 1600
+        self.additional_dmg = 0
+
+    def apply_stats(self, character):
+        character.weapon.bonus_bullet_damage += self.additional_dmg
+    
+    def show_cond_window(self):
+        self.additional_dmg = st.slider("Additional Weapon Damage", 0.0, 0.5, 0.5, 0.1)
+
 
 class Stalker(Item):
     def __init__(self):
@@ -310,28 +356,44 @@ class AlchemicalFire(Item):
     def apply_stats(self, character: stats.Character):
         character.spirit.spirit_power += 8
 
-class BallisticEnchantment(Item):
+class BallisticEnchantment(Item, ConditionalProc):
     def __init__(self):
         self.name = "Ballistic Enchantment"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/long_range.webp"
         self.price = 3200
+        self.hero_hit_ctr = 0
+        self.creep_hit_ctr = 0
     
     @classmethod
     def register(cls, inventory):
         ExtendedMagazine.remove(inventory)
         super().register(inventory)
 
-class Berserker(Item):
+    def apply_stats(self, character):
+        character.weapon.bonus_bullet_damage += self.hero_hit_ctr * 0.2 + self.creep_hit_ctr * 0.05
+
+    def show_cond_window(self):
+        self.hero_hit_ctr = st.slider("No. Hero Hits", 0, 6, 0)
+        self.creep_hit_ctr = st.slider("No. Creep Hits", 0, 8, 0)
+
+class Berserker(Item, ConditionalProc):
     def __init__(self):
         self.name = "Berserker"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/berserker.webp"
         self.price = 3200
+        self.stack_ctr = 0
 
     def apply_stats(self, character: stats.Character):
         character.vitality.bullet_resist = stats.add_multiplicative(character.vitality.bullet_resist, 0.08)
+        character.weapon.bonus_bullet_damage += self.stack_ctr * 0.07
 
-class BloodTribute(Item):
+
+    def show_cond_window(self):
+        self.stack_ctr = st.slider("No. Stacks", 0, 10)
+
+class BloodTribute(Item, ConditionalProc):
     def __init__(self):
+        super().__init__()
         self.name = "Blood Tribute"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/blood_tribute.webp"
         self.price = 3200
@@ -339,7 +401,12 @@ class BloodTribute(Item):
     def apply_stats(self, character: stats.Character):
         character.vitality.spirit_resist = stats.add_multiplicative(character.vitality.spirit_resist, 0.08)
 
-class BurstFire(Item):
+        if self.enable:
+            st.warning("TODO: Debuff Resist")
+            character.weapon.bonus_fire_rate += 0.35
+            character.vitality.move_speed += 2
+
+class BurstFire(Item, ConditionalProc):
     def __init__(self):
         self.name = "Burst Fire"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/burst_fire.webp"
@@ -348,12 +415,16 @@ class BurstFire(Item):
     def apply_stats(self, character: stats.Character):
         character.weapon.bonus_fire_rate += 0.1
 
+        if self.enable:
+            character.weapon.bonus_fire_rate += 0.32
+            character.vitality.move_speed += 1.25
+        
     @classmethod
     def register(cls, inventory):
         RapidRounds.remove(inventory)
         super().register(inventory)
 
-class CultistSacrifice(Item):
+class CultistSacrifice(Item, ConditionalProc):
     def __init__(self):
         self.name = "Cultist Sacrifice"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/cultist_sacrifice.webp"
@@ -364,16 +435,26 @@ class CultistSacrifice(Item):
         MonsterRounds.remove(inventory)
         super().register(inventory)
 
-class EscalatingResilience(Item):
+    def apply_stats(self, character):
+        if self.enable:
+            st.warning("TODO: Scale with boon (Implement boon first!!!)")
+
+class EscalatingResilience(Item, ConditionalProc):
     def __init__(self):
         self.name = "Escalating Resilience"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/escalating_resilience.webp"
         self.price = 3200
+        self.stacks = 0
 
     def apply_stats(self, character: stats.Character):
         character.weapon.bonus_ammo_perc += 0.3
         character.vitality.max_health += 75
         character.weapon.bonus_bullet_damage += 0.15
+        character.vitality.bullet_resist = stats.add_multiplicative\
+                                            (character.vitality.bullet_resist, self.stacks * 0.02)
+
+    def show_cond_window(self):
+        self.stacks = st.slider("Stacks", 0, 15)
 
     @classmethod
     def register(cls, inventory):
@@ -410,13 +491,21 @@ class Headhunter(Item):
         character.weapon.bonus_bullet_damage += 0.05
         character.vitality.max_health += 50
 
-class HeroicAura(Item):
+class HeroicAura(Item, ConditionalProc):
     def __init__(self):
         self.name = "Heroic Aura"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/heroic_aura.webp"
         self.price = 3200
 
-class HollowPoint(Item):
+    def apply_stats(self, character):
+        character.vitality.bullet_resist = stats.add_multiplicative\
+                                           (character.vitality.bullet_resist, 0.15)
+        if self.enable:
+            character.weapon.bonus_fire_rate += 0.26
+            character.vitality.move_speed += 2.25
+
+
+class HollowPoint(Item, ConditionalProc):
     def __init__(self):
         self.name = "Hollow Point"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/hollow_point.webp"
@@ -425,17 +514,25 @@ class HollowPoint(Item):
     def apply_stats(self, character: stats.Character):
         character.vitality.max_health += 125
 
-class HuntersAura(Item):
+        if self.enable:
+            character.weapon.bonus_bullet_damage += 0.35
+            st.warning("TODO: Bullet shred")
+
+class HuntersAura(Item, ConditionalProc):
     def __init__(self):
         self.name = "Hunter's Aura"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/hunters_aura.webp"
         self.price = 3200
+        self.amplified = False
 
     def apply_stats(self, character: stats.Character):
         character.vitality.max_health += 100
+        st.warning("TODO: Shred")
 
+    def show_cond_window(self):
+        self.amplified = st.toggle("Amplified", False)
 
-class PointBlank(Item):
+class PointBlank(Item, ConditionalProc):
     def __init__(self):
         self.name = "Point Blank"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/point_blank.webp"
@@ -450,8 +547,10 @@ class PointBlank(Item):
         character.vitality.max_health += 75
         character.vitality.melee_resist = stats.add_multiplicative(character.vitality.melee_resist, 0.3)
 
+        if self.enable:
+            character.weapon.bonus_bullet_damage += 0.5
 
-class Sharpshooter(Item):
+class Sharpshooter(Item, ConditionalProc):
     def __init__(self):
         self.name = "Sharpshooter"
         self.icon = "https://game.deadlock.coach/vpk/panorama/images/items/weapon/sharp_shooter.webp"
@@ -461,6 +560,10 @@ class Sharpshooter(Item):
     def register(cls, inventory):
         LongRange.remove(inventory)
         super().register(inventory)
+
+    def apply_stats(self, character):
+        if self.enable:
+            character.weapon.bonus_bullet_damage += 0.7
 
 class SpiritRend(Item):
     def __init__(self):
