@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import streamlit as st
 
 class Weapon:
     def __init__(   self,\
@@ -30,6 +31,9 @@ class Weapon:
         self.heavy_melee_damage             = heavy_melee_damage
         self.bonus_melee_damage             = bonus_melee_damage
         self.bonus_heavy_melee_damage       = bonus_heavy_melee_damage
+    
+    def draw(self):
+        st.write(f'bonus_bullet_damage: {self.bonus_bullet_damage}')
 
 
 class Vitality:
@@ -56,11 +60,17 @@ class Vitality:
         self.sprint_speed                   = sprint_speed
         self.stamina_cooldown               = stamina_cooldown
         self.stamina_count                  = stamina_count
+    
+    def draw(self):
+        pass
 
 class Spirit:
     def __init__(   self,\
                     spirit_power:           int     = 0):
         self.spirit_power = spirit_power
+    
+    def draw(self):
+        pass
 
 
 class Growth:
@@ -73,12 +83,20 @@ class Growth:
         self.light_melee_damage             = light_melee_damage
         self.max_health                     = max_health
         self.spirit_power                   = spirit_power
+    
+    def draw(self):
+        pass
 
 
 
 class Character:
-    def __init__(self):
-        self.weapon     = Weapon()
-        self.vitality   = Vitality()
-        self.spirit     = Spirit()
-        self.growth     = Growth()
+    def __init__(self, weapon: Weapon= Weapon(), vitality: Vitality= Vitality(), spirit: Spirit= Spirit(), growth: Growth= Growth()):
+        self.weapon     = weapon
+        self.vitality   = vitality
+        self.spirit     = spirit
+        self.growth     = growth
+
+    def draw(self):
+        self.weapon.draw()
+        self.vitality.draw()
+        self.spirit.draw()

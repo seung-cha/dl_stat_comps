@@ -1,4 +1,5 @@
-from .character_stats import *
+from .stats_base import *
+from .char_stats import *
 
 
 # https://deadlock.wiki/Damage_Resistance
